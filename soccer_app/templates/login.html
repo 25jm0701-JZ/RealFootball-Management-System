@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Log In" %} - RealFootball{% endblock %}
+{% block body_class %}bg-light d-flex flex-column min-vh-100{% endblock %}
+{% block main_class %}container py-5 flex-grow-1 d-flex align-items-center{% endblock %}
+{% block content %}
+<div class="row justify-content-center w-100">
+  <div class="col-md-6 col-lg-4">
+    <div class="card shadow-sm p-4">
+      <h3 class="text-center mb-4 text-primary">
+        <i class="fa-solid fa-futbol me-1"></i>{% trans "Log In RealFootball" %}
+      </h3>
+
+      <form method="post" action="{% url 'custom_login' %}">
+        {% csrf_token %}
+
+        <div class="mb-3">
+          <label class="form-label">{% trans "Identity card type" %}</label>
+          <select name="identity" class="form-select" required>
+            <option value="user">{% trans "User" %}</option>
+            <option value="manager">{% trans "Football Manager" %}</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">{% trans "Username" %}</label>
+          <input type="text" name="username" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">{% trans "Password" %}</label>
+          <input type="password" name="password" class="form-control" required>
+        </div>
+
+        <div class="d-grid mt-4">
+          <button type="submit" class="btn btn-success btn-lg">
+            <i class="fa-solid fa-right-to-bracket me-1"></i>{% trans "Log In" %}
+          </button>
+        </div>
+      </form>
+
+      <p class="text-center text-muted mt-3 mb-0">
+        <small>
+          {% trans "No account yet?" %}
+          <a href="{% url 'register' %}">{% trans "Register" %}</a>
+        </small>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

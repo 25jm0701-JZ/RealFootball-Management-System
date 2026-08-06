@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "My players" %} - RealFootball{% endblock %}
+{% block content %}
+<h1 class="text-center mb-4">
+  <i class="fa-solid fa-users me-1"></i>{% trans "My list of players" %}
+</h1>
+
+{% if not has_team %}
+<div class="card bg-light mx-auto" style="max-width: 640px;">
+  <div class="card-body text-center py-5">
+    <i class="fa-solid fa-futbol text-muted display-4 mb-3"></i>
+    <h3 class="text-muted">{% trans "You don't have a team yet" %}</h3>
+    <p class="text-muted">{% trans "Join a team to start managing your players" %}</p>
+    <a href="{% url 'manager_check_employment' %}" class="btn btn-primary mt-3">
+      <i class="fa-solid fa-plus me-1"></i>{% trans "Add team" %}
+    </a>
+  </div>
+</div>
+{% else %}
+<div class="card shadow-sm">
+  <div class="card-header bg-primary text-white">
+    <h3 class="mb-0">{% trans "My Players" %}</h3>
+  </div>
+  <div class="card-body">
+    {% if players %}
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle">
+          <thead>
+            <tr>
+              <th scope="col">{% trans "Player's name" %}</th>
+              <th scope="col">{% trans "Birthday" %}</th>
+              <th scope="col">{% trans "Height" %}</th>
+              <th scope="col">{% trans "Weight" %}</th>
+              <th scope="col" class="text-center">{% trans "Operations" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for player in players %}
+              <tr>
+                <td>{{ player.player_name }}</td>
+                <td>{{ player.birthday|default:"—" }}</td>
+                <td>{{ player.height|default:"—" }}</td>
+                <td>{{ player.weight|default:"—" }}</td>
+                <td class="text-center">
+                  <a href="{% url 'manager_view_player_details' player.player_fifa_api_id %}" class="btn btn-sm btn-info">
+                    <i class="fa-solid fa-eye me-1"></i>{% trans "See details" %}
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="text-muted">{% trans "Your team doesn't have any players yet" %}</p>
+    {% endif %}
+  </div>
+  <div class="card-footer">
+    <a href="{% url 'manager_dashboard' %}" class="btn btn-secondary">
+      <i class="fa-solid fa-arrow-left me-1"></i>{% trans "Return manager dashboard" %}
+    </a>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Follow teams" %} - RealFootball{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <div class="card shadow-sm p-4">
+      <h3 class="text-center text-success mb-4">
+        <i class="fa-solid fa-shield-halved me-1"></i>{% trans "Add teams" %}
+      </h3>
+
+      <!-- 第一步：选择联赛 -->
+      <form method="get" class="mb-4">
+        <label class="form-label">{% trans "Step 1: Select the league" %}</label>
+        <select name="league_id" class="form-select" onchange="this.form.submit()">
+          <option value="">{% trans "Please Select" %}</option>
+          {% for league in leagues %}
+            <option value="{{ league.id }}" {% if league_id == league.id|stringformat:"s" %}selected{% endif %}>
+              {{ league.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </form>
+
+      <!-- 第二步：选择球队（联赛已选时） -->
+      {% if teams %}
+      <form method="post">
+        {% csrf_token %}
+        <label class="form-label">{% trans "Step 2: Select the team" %}</label>
+        <select name="team_api_id" class="form-select mb-3" required>
+          <option value="">{% trans "Please Select" %}</option>
+          {% for team in teams %}
+            <option value="{{ team.team_api_id }}">{{ team.team_long_name }}</option>
+          {% endfor %}
+        </select>
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-plus me-1"></i>{% trans "Follow" %}
+          </button>
+        </div>
+      </form>
+      {% elif league_id %}
+        <div class="alert alert-warning text-center">
+          {% trans "No teams available in this league." %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

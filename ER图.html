@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RealFootball 足球管理系统 — ER 图</title>
+<style>
+  body {
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    background: #f5f7fb;
+    color: #1f2937;
+    margin: 0;
+    padding: 24px;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .subtitle { color: #6b7280; font-size: 13px; margin-bottom: 20px; }
+  .diagram-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    margin-bottom: 20px;
+    overflow-x: auto;
+  }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    font-size: 13px;
+    color: #374151;
+    background: #fff;
+    border-radius: 12px;
+    padding: 14px 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  }
+  .legend .item { display: flex; align-items: center; gap: 6px; }
+  .legend .box { width: 14px; height: 14px; border-radius: 3px; }
+  .box.data   { background: #dbeafe; border: 2px solid #2563eb; }
+  .box.biz    { background: #dcfce7; border: 2px solid #16a34a; }
+  .tag { font-size: 11px; padding: 1px 6px; border-radius: 4px; margin-left: 6px; vertical-align: 1px; }
+  .tag.pk { background: #fef3c7; color: #b45309; border: 1px solid #f59e0b; }
+  .tag.fk { background: #e0e7ff; color: #4338ca; border: 1px solid #6366f1; }
+  .note { font-size: 12.5px; color: #6b7280; line-height: 1.7; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>RealFootball 足球管理系统 — 数据库 ER 图</h1>
+  <div class="subtitle">数据库：SQLite（soccer.db）｜共 15 张表｜数据表来自 Kaggle 欧洲足球数据集，业务表为系统设计</div>
+
+  <div class="diagram-box">
+    <pre class="mermaid">
+erDiagram
+    %% ==================== 数据表 ====================
+    COUNTRY ||--o{ LEAGUE : "拥有 1:N"
+    LEAGUE ||--o{ TEAM : "包含 1:N"
+    TEAM ||--o{ PLAYER : "拥有 1:N"
+    LEAGUE ||--o{ MATCH : "记录比赛 1:N"
+    TEAM ||--o{ MATCH : "主场 1:N"
+    TEAM ||--o{ MATCH : "客场 1:N"
+    TEAM ||--o{ TEAM_ATTRIBUTES : "战术快照 1:N"
+    PLAYER ||--o{ PLAYER_ATTRIBUTES : "能力快照 1:N"
+
+    COUNTRY {
+        int id PK
+        string name
+    }
+    LEAGUE {
+        int id PK
+        int country_id FK
+        string name
+    }
+    TEAM {
+        int team_api_id PK
+        string team_long_name
+        string team_short_name
+        int league_id FK
+    }
+    PLAYER {
+        int player_fifa_api_id PK
+        string player_name
+        string birthday
+        int height
+        int weight
+        int team_api_id FK
+        int league_id FK
+    }
+    MATCH {
+        int id
+        string season
+        string date
+        int home_team_api_id FK
+        int away_team_api_id FK
+        int home_team_goal
+        int away_team_goal
+        int league_id FK
+    }
+    PLAYER_ATTRIBUTES {
+        int id
+        int player_fifa_api_id FK
+        string date
+        int overall_rating
+        int potential
+        int finishing
+        int dribbling
+        int marking
+        int gk_reflexes
+    }
+    TEAM_ATTRIBUTES {
+        int id
+        int team_api_id FK
+        string date
+        int buildUpPlaySpeed
+        int chanceCreationPassing
+        int defencePressure
+    }
+
+    %% ==================== 业务表 ====================
+    USER ||--o{ SUBSCRIBE : "关注球队 1:N"
+    TEAM ||--o{ SUBSCRIBE : "被关注 1:N"
+    USER ||--o{ FOLLOW : "关注球员 1:N"
+    PLAYER ||--o{ FOLLOW : "被关注 1:N"
+    USER ||--o| USER_ACCOUNT : "账号 1:1"
+    FOOTBALL_MANAGER ||--o| MANAGER_ACCOUNT : "账号 1:1"
+    FOOTBALL_MANAGER ||--o| EMPLOY : "执教 1:1"
+    TEAM ||--o| EMPLOY : "被执教 1:1"
+    FOOTBALL_MANAGER ||--o{ INTERESTED : "感兴趣 1:N"
+    PLAYER ||--o{ INTERESTED : "被感兴趣 1:N"
+
+    USER {
+        int user_id
+        string name
+        int age
+    }
+    USER_ACCOUNT {
+        int user_id
+        string username
+        string password
+    }
+    FOOTBALL_MANAGER {
+        int licence_id
+        string name
+        int age
+    }
+    MANAGER_ACCOUNT {
+        int licence_id
+        string username
+        string password
+    }
+    SUBSCRIBE {
+        int id
+        int user_id FK
+        int team_api_id FK
+    }
+    FOLLOW {
+        int id
+        int user_id FK
+        int player_fifa_api_id FK
+    }
+    EMPLOY {
+        int licence_id PK
+        int team_api_id FK
+    }
+    INTERESTED {
+        int id
+        int licence_id FK
+        int player_fifa_api_id FK
+    }
+    </pre>
+  </div>
+
+  <div class="legend">
+    <div class="item"><span class="box data"></span> 数据表（数据集导入，只读）</div>
+    <div class="item"><span class="box biz"></span> 业务表（系统自行维护）</div>
+    <div class="item"><span class="tag pk">PK</span> 主键</div>
+    <div class="item"><span class="tag fk">FK</span> 外键（应用层维护，未建数据库级约束）</div>
+  </div>
+
+  <p class="note">
+    说明：<br>
+    ① 数据表之间存在典型的「国家 → 联赛 → 球队 → 球员」层级结构；player_attributes / team_attributes
+       为时间序列快照表，同一实体多个日期记录，取 date 最新一条为当前值。<br>
+    ② 业务表实现两个角色：普通球迷（user）通过 subscribe / follow 关注球队与球员；足球经理
+       （football_manager）通过 employ 执教一支球队、通过 interested 记录感兴趣的球员。<br>
+    ③ 全库外键均由 Django 应用层维护，数据库层面未建 FOREIGN KEY 约束（managed=False），
+       业务表主键采用 MAX(id)+1 手工生成。
+  </p>
+
+</div>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      er: {
+        lineStrokeColor: '#6b7280',
+        entityStrokeColor: '#cbd5e1',
+        entityFillColor: '#ffffff',
+        attrFillColor: '#f8fafc',
+        attributeFillColor: '#f8fafc'
+      },
+      primaryColor: '#2563eb',
+      fontSize: '13px'
+    },
+    er: {
+      diagramPadding: 16,
+      layoutDirection: 'TB'
+    },
+    securityLevel: 'loose'
+  });
+</script>
+</body>
+</html>

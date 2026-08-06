@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load custom_filters %}
+{% block title %}{{ player.player_name }} - {% trans "Details" %}{% endblock %}
+{% block extra_head %}
+<style>
+  .stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+  }
+  .stat-card {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .stat-name {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #6c757d;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .stat-value {
+    font-size: 1.15em;
+  }
+</style>
+{% endblock %}
+{% block content %}
+<div class="col-lg-10 mx-auto">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h2 class="mb-0">
+        <i class="fa-solid fa-user me-1"></i>{{ player.player_name }} - {% trans "Details" %}
+      </h2>
+    </div>
+
+    <div class="card-body">
+      {% if attributes %}
+        <h5 class="text-muted mb-3">{% trans "Basic information" %}</h5>
+        <div class="stats-container mb-4">
+          <div class="stat-card">
+            <div class="stat-name">{% trans "FIFA API ID" %}</div>
+            <div class="stat-value">{{ attributes.player_fifa_api_id|default:"—" }}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-name">{% trans "Player API ID" %}</div>
+            <div class="stat-value">{{ attributes.player_api_id|default:"—" }}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-name">{% trans "Birthday" %}</div>
+            <div class="stat-value">{{ player.birthday|default:"—" }}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-name">{% trans "Height" %}</div>
+            <div class="stat-value">{{ player.height|default:"—" }}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-name">{% trans "Weight" %}</div>
+            <div class="stat-value">{{ player.weight|default:"—" }}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-name">{% trans "Data Date" %}</div>
+            <div class="stat-value">{{ attributes.date|default:"—" }}</div>
+          </div>
+        </div>
+
+        <h5 class="text-muted mb-3">{% trans "Overall ability" %}</h5>
+        <div class="stats-container mb-4">
+          <div class="stat-card">
+            <div class="stat-name">{% trans "Overall" %}</div>
+            <div class="stat-value text-primary fw-bold">{{ attributes.overall_rating|default:"—" }}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-name">{% trans "Potential" %}</div>
+            <div class="stat-value text-success fw-bold">{{ attributes.potential|default:"—" }}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-name">{% trans "Preferred Foot" %}</div>
+            <div class="stat-value">{{ attributes.preferred_foot|default:"—" }}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-name">{% trans "Attacking Work Rate" %}</div>
+            <div class="stat-value">{{ attributes.attacking_work_rate|default:"—" }}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-name">{% trans "Defensive Work Rate" %}</div>
+            <div class="stat-value">{{ attributes.defensive_work_rate|default:"—" }}</div>
+          </div>
+        </div>
+
+        <h5 class="text-muted mb-3">{% trans "Technical abilities" %}</h5>
+        <div class="stats-container mb-4">
+          {% for label, field in stats %}
+            <div class="stat-card">
+              <div class="stat-name">{{ label }}</div>
+              <div class="stat-value">{{ attributes|field_value:field|default:"—" }}</div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="alert alert-secondary text-center">
+          {% trans "No attribute data available for this player." %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="card-footer bg-light text-center">
+      <a href="{% url back_url %}" class="btn btn-primary">
+        <i class="fa-solid fa-arrow-left me-1"></i>{{ back_label }}
+      </a>
+      <a href="{% url 'manager_dashboard' %}" class="btn btn-secondary">
+        <i class="fa-solid fa-house me-1"></i>{% trans "Return manager dashboard" %}
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

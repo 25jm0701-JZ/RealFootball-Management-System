@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Recommended teams" %} - RealFootball{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card shadow-sm p-4">
+      <h3 class="text-center text-primary mb-4">
+        <i class="fa-solid fa-wand-magic-sparkles me-1"></i>{% trans "Explore the teams that might interest you" %}
+      </h3>
+
+      <!-- 属性选择 -->
+      <form method="get" class="mb-4">
+        <label class="form-label">{% trans "Select the attribute indicators to focus on:" %}</label>
+        <select name="attribute" class="form-select" onchange="this.form.submit()">
+          <option value="">{% trans "Please Select" %}</option>
+          {% for attr in attributes %}
+            <option value="{{ attr }}" {% if attr == selected_attribute %}selected{% endif %}>{{ attr }}</option>
+          {% endfor %}
+        </select>
+      </form>
+
+      <!-- 提示信息 -->
+      {% if message %}
+        <div class="alert alert-warning text-center">{{ message }}</div>
+      {% endif %}
+
+      <!-- 推荐球队 -->
+      {% if recommended_teams %}
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered text-center align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>{% trans "Team" %}</th>
+                <th>{{ selected_attribute|capfirst }}</th>
+                <th>{% trans "Action" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in recommended_teams %}
+              <tr>
+                <td>{{ item.team.team_long_name }}</td>
+                <td>{{ item.attribute_value }}</td>
+                <td>
+                  <form method="post" class="d-inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="team_api_id" value="{{ item.team.team_api_id }}">
+                    <button type="submit" class="btn btn-sm btn-success">
+                      <i class="fa-solid fa-plus me-1"></i>{% trans "Follow" %}
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% elif selected_attribute and not message %}
+        <div class="alert alert-secondary text-center">{% trans "No similar team was found." %}</div>
+      {% endif %}
+
+      <!-- 返回按钮 -->
+      <div class="text-center mt-4">
+        <a href="{% url 'user_dashboard' %}" class="btn btn-outline-secondary">
+          <i class="fa-solid fa-arrow-left me-1"></i>{% trans "Back to Dashboard" %}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

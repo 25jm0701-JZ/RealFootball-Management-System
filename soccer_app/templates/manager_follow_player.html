@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Add interested players" %} - RealFootball{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <div class="card shadow-sm p-4">
+      <h4 class="text-center text-primary mb-4">
+        <i class="fa-solid fa-user-plus me-1"></i>{% trans "Add the players of interest" %}
+      </h4>
+
+      <!-- 第一步：选择联赛 -->
+      <form method="get" class="mb-4">
+        <div class="form-group">
+          <label class="form-label" for="league_id">{% trans "Step 1: Select the league" %}</label>
+          <select id="league_id" name="league_id" class="form-select" onchange="this.form.submit()">
+            <option value="">{% trans "Please Select" %}</option>
+            {% for league in leagues %}
+              <option value="{{ league.id }}" {% if league_id == league.id|stringformat:"s" %}selected{% endif %}>
+                {{ league.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      </form>
+
+      <!-- 第二步：选择队伍 -->
+      {% if teams %}
+      <form method="get" class="mb-4">
+        <input type="hidden" name="league_id" value="{{ league_id }}">
+        <div class="form-group">
+          <label class="form-label" for="team_api_id">{% trans "Step 2: Select the team" %}</label>
+          <select id="team_api_id" name="team_api_id" class="form-select" onchange="this.form.submit()">
+            <option value="">{% trans "Please Select" %}</option>
+            {% for team in teams %}
+              <option value="{{ team.team_api_id }}" {% if team_api_id == team.team_api_id|stringformat:"s" %}selected{% endif %}>
+                {{ team.team_long_name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      </form>
+      {% endif %}
+
+      <!-- 如果选了球队但球员为空，提示 -->
+      {% if team_api_id and players is not None and players|length == 0 %}
+        <div class="alert alert-warning">
+          <i class="fa-solid fa-triangle-exclamation me-2"></i>{% trans "There is no player information of this team for the time being." %}
+        </div>
+      {% endif %}
+
+      <!-- 第三步：选择球员 -->
+      {% if players %}
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group mb-4">
+          <label class="form-label" for="player_fifa_api_id">{% trans "Step 3: Select players" %}</label>
+          <select id="player_fifa_api_id" name="player_fifa_api_id" class="form-select" required>
+            <option value="">{% trans "Please Select" %}</option>
+            {% for player in players %}
+              <option value="{{ player.player_fifa_api_id }}">{{ player.player_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">
+          <i class="fa-solid fa-heart me-2"></i>{% trans "Show interest" %}
+        </button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

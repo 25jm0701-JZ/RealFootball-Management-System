@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Unfollow players" %} - RealFootball{% endblock %}
+{% block body_class %}bg-light{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-sm p-4">
+      <h3 class="text-center text-danger mb-4">
+        <i class="fa-solid fa-user-minus me-1"></i>{% trans "Unfollow players" %}
+      </h3>
+
+      {% if players %}
+      <form method="post" class="mb-4">
+        {% csrf_token %}
+        <label class="form-label">{% trans "Select the players to unfollow:" %}</label>
+        <select name="player_fifa_api_id" class="form-select mb-3" required>
+          {% for player in players %}
+            <option value="{{ player.player_fifa_api_id }}">{{ player.player_name }}</option>
+          {% endfor %}
+        </select>
+        <div class="d-grid">
+          <button type="submit" class="btn btn-danger btn-lg">
+            <i class="fa-solid fa-trash-can me-1"></i>{% trans "Unfollow" %}
+          </button>
+        </div>
+      </form>
+      {% else %}
+        <div class="alert alert-secondary text-center">
+          {% trans "You haven't followed any players yet." %}
+        </div>
+      {% endif %}
+
+      <div class="text-center">
+        <a href="{% url 'user_dashboard' %}" class="btn btn-outline-secondary">
+          <i class="fa-solid fa-arrow-left me-1"></i>{% trans "Back to Dashboard" %}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

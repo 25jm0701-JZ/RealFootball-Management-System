@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Interested players" %} - RealFootball{% endblock %}
+{% block content %}
+<div class="col-lg-9 mx-auto">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">
+        <i class="fa-solid fa-bookmark me-1"></i>{% trans "View Interested Players" %}
+      </h4>
+    </div>
+    <div class="card-body">
+      {% if interested_players %}
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered align-middle">
+            <thead>
+              <tr>
+                <th scope="col">{% trans "Player Name" %}</th>
+                <th scope="col">{% trans "Player Features" %}</th>
+                <th scope="col" class="text-center">{% trans "Actions" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in interested_players %}
+                <tr>
+                  <td>{{ item.player.player_name }}</td>
+                  <td>
+                    {% if item.attributes %}
+                      {% trans "Overall Rating" %}: <strong>{{ item.attributes.overall_rating|default:"—" }}</strong>,
+                      {% trans "Potential" %}: <strong>{{ item.attributes.potential|default:"—" }}</strong>
+                    {% else %}
+                      <span class="text-muted">{% trans "No attribute data yet." %}</span>
+                    {% endif %}
+                  </td>
+                  <td class="text-center">
+                    <form method="post" action="{% url 'manager_delete_interested_player' item.player.player_fifa_api_id %}" class="d-inline">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-danger"
+                              onclick="return confirm('{% blocktranslate with player_name=item.player.player_name %}Are you sure you want to delete your interest in {{ player_name }}?{% endblocktranslate %}')">
+                        <i class="fa-solid fa-trash-can me-1"></i>{% trans "Delete" %}
+                      </button>
+                    </form>
+                    <a href="{% url 'manager_view_player_attributes' item.player.player_fifa_api_id %}" class="btn btn-sm btn-outline-primary">
+                      <i class="fa-solid fa-eye me-1"></i>{% trans "View Attributes" %}
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <!-- 继续添加入口 -->
+        <div class="border-top pt-3 mt-3 text-center">
+          <a href="{% url 'manager_follow_player' %}" class="btn btn-primary">
+            <i class="fa-solid fa-user-plus me-1"></i>{% trans "Continue Adding Players" %}
+          </a>
+          <a href="{% url 'recommend_player_view' %}" class="btn btn-outline-primary ms-1">
+            <i class="fa-solid fa-wand-magic-sparkles me-1"></i>{% trans "Get Recommendations" %}
+          </a>
+        </div>
+      {% else %}
+        <div class="alert alert-warning text-center">
+          <i class="fa-solid fa-triangle-exclamation me-2"></i>{% trans "You don't have any interested players yet." %}
+          <div class="mt-2">
+            <a href="{% url 'manager_follow_player' %}" class="btn btn-sm btn-primary">
+              <i class="fa-solid fa-user-plus me-1"></i>{% trans "Add Interested Players" %}
+            </a>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

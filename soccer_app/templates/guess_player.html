@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Guess who?" %} - RealFootball{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <div class="card shadow-sm p-4">
+      <h3 class="text-center mb-4 text-primary">
+        <i class="fa-solid fa-circle-question me-1"></i>{% trans "Guess who this player is?" %}
+      </h3>
+
+      {% if error %}
+        <div class="alert alert-warning text-center">{{ error }}</div>
+      {% endif %}
+
+      <!-- 回答反馈 -->
+      {% if answered %}
+        {% if is_correct %}
+          <div class="alert alert-success text-center">
+            <i class="fa-solid fa-circle-check me-1"></i>{% trans "Correct!" %}
+          </div>
+        {% else %}
+          <div class="alert alert-danger text-center">
+            <i class="fa-solid fa-circle-xmark me-1"></i>
+            {% blocktranslate %}The answer is wrong. The correct answer is: {{ previous_correct }}{% endblocktranslate %}
+          </div>
+        {% endif %}
+      {% endif %}
+
+      <!-- 属性表格 -->
+      <div class="table-responsive mb-4">
+        <table class="table table-bordered table-sm align-middle">
+          <tbody>
+            {% for key, value in attribute_info.items %}
+            <tr>
+              <th class="bg-light text-end" style="width: 45%;">
+                {% if key == 'overall_rating' %}{% trans "Overall Rating" %}
+                {% elif key == 'potential' %}{% trans "Potential" %}
+                {% elif key == 'preferred_foot' %}{% trans "Preferred Foot" %}
+                {% elif key == 'attacking_work_rate' %}{% trans "Attacking Work Rate" %}
+                {% elif key == 'defensive_work_rate' %}{% trans "Defensive Work Rate" %}
+                {% elif key == 'birthday' %}{% trans "Birthday" %}
+                {% elif key == 'height' %}{% trans "Height" %}
+                {% elif key == 'weight' %}{% trans "Weight" %}
+                {% endif %}
+              </th>
+              <td>{{ value }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 答题区域 -->
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label">{% trans "Please choose the player you think:" %}</label>
+          {% for option in options %}
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="selected" value="{{ option }}"
+                   id="option{{ forloop.counter }}" required>
+            <label class="form-check-label" for="option{{ forloop.counter }}">{{ option }}</label>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="d-grid mb-3">
+          <button type="submit" class="btn btn-success">
+            <i class="fa-solid fa-paper-plane me-1"></i>{% trans "Submit your answer" %}
+          </button>
+        </div>
+      </form>
+
+      <!-- 下一题 / 返回 -->
+      <div class="d-flex justify-content-between">
+        <a href="{% url 'guess_player' %}" class="btn btn-outline-primary">
+          <i class="fa-solid fa-rotate-right me-1"></i>{% trans "Next question" %}
+        </a>
+        <a href="{% url 'user_dashboard' %}" class="btn btn-outline-secondary">
+          <i class="fa-solid fa-arrow-left me-1"></i>{% trans "Back to Dashboard" %}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

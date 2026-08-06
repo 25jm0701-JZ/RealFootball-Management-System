@@ -1,0 +1,691 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: RealFootball 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-06 12:00+0800\n"
+"PO-Revision-Date: 2026-08-06 12:00+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_Hans\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Action"
+msgstr "操作"
+
+msgid "Actions"
+msgstr "操作"
+
+msgid "Add Club"
+msgstr "加入球队"
+
+msgid "Add Interested Players"
+msgstr "添加感兴趣的球员"
+
+msgid "Add interested players"
+msgstr "添加感兴趣的球员"
+
+msgid "Add team"
+msgstr "加入球队"
+
+msgid "Add teams"
+msgstr "添加球队"
+
+msgid "Add the players of interest"
+msgstr "添加感兴趣的球员"
+
+msgid "Add the players you follow"
+msgstr "添加你关注的球员"
+
+msgid "Add to interested"
+msgstr "加入关注"
+
+msgid "Age"
+msgstr "年龄"
+
+msgid "All"
+msgstr "全部"
+
+msgid "All Players"
+msgstr "全部球员"
+
+msgid "All games"
+msgstr "全部比赛"
+
+msgid "All players"
+msgstr "全部球员"
+
+msgid "Application Submitted"
+msgstr "申请已提交"
+
+msgid "Are you sure you want to delete your interest in %(player_name)s?"
+msgstr "确定要删除对 %(player_name)s 的关注吗？"
+
+msgid "Attacking Work Rate"
+msgstr "进攻工作投入"
+
+msgid "Away team"
+msgstr "客队"
+
+msgid "Back"
+msgstr "返回"
+
+msgid "Back to All Players"
+msgstr "返回全部球员"
+
+msgid "Back to Dashboard"
+msgstr "返回功能界面"
+
+msgid "Back to Home"
+msgstr "返回首页"
+
+msgid "Back to Manager Dashboard"
+msgstr "返回经理控制台"
+
+msgid "Back to My Players"
+msgstr "返回我的球员"
+
+msgid "Ball Control"
+msgstr "控球"
+
+msgid "Basic information"
+msgstr "基本信息"
+
+msgid "Birthday"
+msgstr "生日"
+
+msgid "Build up play passing"
+msgstr "组织传球"
+
+msgid "Build up play speed"
+msgstr "组织速度"
+
+msgid "Chance creation passing"
+msgstr "创造力传球"
+
+msgid "Check Employment"
+msgstr "查看执教关系"
+
+msgid "Check Employment Relationship"
+msgstr "查看执教关系"
+
+msgid "Correct!"
+msgstr "回答正确！"
+
+msgid "Data Date"
+msgstr "数据日期"
+
+msgid "Date"
+msgstr "日期"
+
+msgid "Defence aggression"
+msgstr "防守侵略性"
+
+msgid "Defence pressure"
+msgstr "防守压迫"
+
+msgid "Defence team width"
+msgstr "防守阵型宽度"
+
+msgid "Defensive Work Rate"
+msgstr "防守工作投入"
+
+msgid "Delete"
+msgstr "删除"
+
+msgid "Deleted"
+msgstr "已删除"
+
+msgid "Details"
+msgstr "详情"
+
+msgid "Dribbling"
+msgstr "盘带"
+
+msgid "Employ this club"
+msgstr "执教该俱乐部"
+
+msgid "Error"
+msgstr "错误"
+
+msgid "Explore the teams that might interest you"
+msgstr "探索可能让你感兴趣的球队"
+
+msgid "FIFA API ID"
+msgstr "FIFA API ID"
+
+msgid "Failed to create the employment record."
+msgstr "创建执教记录失败。"
+
+msgid "Follow"
+msgstr "关注"
+
+msgid "Follow Player"
+msgstr "关注球员"
+
+msgid "Follow Team"
+msgstr "关注球队"
+
+msgid "Follow players"
+msgstr "关注球员"
+
+msgid "Follow teams"
+msgstr "关注球队"
+
+msgid "Followed players"
+msgstr "已关注的球员"
+
+msgid "Followed team attributes"
+msgstr "已关注球队的属性"
+
+msgid "Followed teams"
+msgstr "已关注的球队"
+
+msgid "Followed teams matches"
+msgstr "关注球队的比赛"
+
+msgid "Football Manager"
+msgstr "足球经理"
+
+msgid "Generate recommendations"
+msgstr "生成推荐"
+
+msgid "Go to User Dashboard"
+msgstr "进入用户界面"
+
+msgid "Guess Player"
+msgstr "猜球员"
+
+msgid "Guess the player mini-game"
+msgstr "猜球员小游戏"
+
+msgid "Guess who this player is?"
+msgstr "猜猜这名球员是谁？"
+
+msgid "Guess who?"
+msgstr "猜猜是谁？"
+
+msgid "Height"
+msgstr "身高"
+
+msgid "Home team"
+msgstr "主队"
+
+msgid "Identity"
+msgstr "身份"
+
+msgid "Identity card type"
+msgstr "身份类型"
+
+msgid "Intelligent player recommendation"
+msgstr "智能球员推荐"
+
+msgid "Interested players"
+msgstr "感兴趣的球员"
+
+msgid "Invalid identity type."
+msgstr "无效的身份类型。"
+
+msgid "Invalid username or password."
+msgstr "用户名或密码错误。"
+
+msgid "Join a club to start managing your team"
+msgstr "加入一个俱乐部开始管理你的球队"
+
+msgid "Join a team to start managing your players"
+msgstr "加入一支球队开始管理你的球员"
+
+msgid "Language"
+msgstr "语言"
+
+msgid "League"
+msgstr "联赛"
+
+msgid "League:"
+msgstr "联赛："
+
+msgid "Log In"
+msgstr "登录"
+
+msgid "Log In RealFootball"
+msgstr "登录 RealFootball"
+
+msgid "Login Successful"
+msgstr "登录成功"
+
+msgid "Logout"
+msgstr "退出登录"
+
+msgid "Manager Dashboard"
+msgstr "经理控制台"
+
+msgid "My Club"
+msgstr "我的俱乐部"
+
+msgid "My Players"
+msgstr "我的球员"
+
+msgid "My Team"
+msgstr "我的球队"
+
+msgid "My list of players"
+msgstr "我的球员列表"
+
+msgid "My players"
+msgstr "我的球员"
+
+msgid "Next question"
+msgstr "下一题"
+
+msgid "No account yet?"
+msgstr "还没有账号？"
+
+msgid "No attribute data available for this player."
+msgstr "该球员暂无属性数据。"
+
+msgid "No attribute data yet."
+msgstr "暂无属性数据。"
+
+msgid "No employment relationship"
+msgstr "暂无执教关系"
+
+msgid "No matching player was found."
+msgstr "未找到匹配的球员。"
+
+msgid "No matching players found."
+msgstr "未找到匹配的球员。"
+
+msgid "No player data available."
+msgstr "暂无球员数据。"
+
+msgid "No players in your squad yet"
+msgstr "你的球队还没有球员"
+
+msgid "No similar team was found."
+msgstr "未找到相似的球队。"
+
+msgid "No team attributes available"
+msgstr "暂无球队属性"
+
+msgid "No teams available in this league."
+msgstr "该联赛暂无球队。"
+
+msgid "Only POST requests are supported for login."
+msgstr "登录仅支持 POST 请求。"
+
+msgid "Operation"
+msgstr "操作"
+
+msgid "Operations"
+msgstr "操作"
+
+msgid "Overall"
+msgstr "综合评分"
+
+msgid "Overall Rating"
+msgstr "综合评分"
+
+msgid "Overall ability"
+msgstr "综合能力"
+
+msgid "Password"
+msgstr "密码"
+
+msgid "Player API ID"
+msgstr "球员 API ID"
+
+msgid "Player Features"
+msgstr "球员特点"
+
+msgid "Player Name"
+msgstr "球员姓名"
+
+msgid "Player Recommendations"
+msgstr "球员推荐"
+
+msgid "Player followed successfully."
+msgstr "球员关注成功。"
+
+msgid "Player not found."
+msgstr "未找到该球员。"
+
+msgid "Player recommendation"
+msgstr "球员推荐"
+
+msgid "Player unfollowed successfully."
+msgstr "球员取消关注成功。"
+
+msgid "Please Select"
+msgstr "请选择"
+
+msgid "Please choose the player you think:"
+msgstr "请选择你认为是正确答案的球员："
+
+msgid "Please select"
+msgstr "请选择"
+
+msgid "Please select a team."
+msgstr "请选择球队。"
+
+msgid "Please select the operation to enter the system"
+msgstr "请选择操作进入系统"
+
+msgid "Please select the operation you want to perform:"
+msgstr "请选择你要执行的操作："
+
+msgid "Potential"
+msgstr "潜力"
+
+msgid "Preferred Foot"
+msgstr "惯用脚"
+
+msgid "Recommended team followed successfully."
+msgstr "推荐球队关注成功。"
+
+msgid "Recommended teams"
+msgstr "推荐球队"
+
+msgid "Register"
+msgstr "注册"
+
+msgid "Register a new account"
+msgstr "注册新账号"
+
+msgid "Registration Successful"
+msgstr "注册成功"
+
+msgid "Registration successful. You are now logged in as a regular user."
+msgstr "注册成功。你现在已以普通用户身份登录。"
+
+msgid "Return manager dashboard"
+msgstr "返回经理控制台"
+
+msgid "Score"
+msgstr "比分"
+
+msgid "Search"
+msgstr "搜索"
+
+msgid "Search Players:"
+msgstr "搜索球员："
+
+msgid "Search by player name"
+msgstr "按球员姓名搜索"
+
+msgid "See details"
+msgstr "查看详情"
+
+msgid "Select League:"
+msgstr "选择联赛："
+
+msgid "Select Team:"
+msgstr "选择球队："
+
+msgid "Select a team:"
+msgstr "选择球队："
+
+msgid "Select the attribute indicators to focus on:"
+msgstr "选择要关注的属性指标："
+
+msgid "Select the players to unfollow:"
+msgstr "选择要取消关注的球员："
+
+msgid "Select the recommended attribute"
+msgstr "选择推荐的属性"
+
+msgid "Select the team to unfollow:"
+msgstr "选择要取消关注的球队："
+
+msgid "Show interest"
+msgstr "表示感兴趣"
+
+msgid "Soccer database management system"
+msgstr "足球数据管理系统"
+
+msgid "Something went wrong"
+msgstr "出了点问题"
+
+msgid "Sprint Speed"
+msgstr "冲刺速度"
+
+msgid "Squad"
+msgstr "阵容"
+
+msgid "Step 1: Select the league"
+msgstr "第一步：选择联赛"
+
+msgid "Step 2: Select the team"
+msgstr "第二步：选择球队"
+
+msgid "Step 3: Select players"
+msgstr "第三步：选择球员"
+
+msgid "Submit your answer"
+msgstr "提交答案"
+
+msgid "Success"
+msgstr "成功"
+
+msgid "Team"
+msgstr "球队"
+
+msgid "Team API ID"
+msgstr "球队 API ID"
+
+msgid "Team Attributes"
+msgstr "球队属性"
+
+msgid "Team Information"
+msgstr "球队信息"
+
+msgid "Team followed successfully."
+msgstr "球队关注成功。"
+
+msgid "Team unfollowed successfully."
+msgstr "球队取消关注成功。"
+
+msgid "Team:"
+msgstr "球队："
+
+msgid "Teams that might be of interest"
+msgstr "可能感兴趣的球队"
+
+msgid "Technical abilities"
+msgstr "技术能力"
+
+msgid "The answer is wrong. The correct answer is: %(previous_correct)s"
+msgstr "回答错误。正确答案是：%(previous_correct)s"
+
+msgid "The followed teams do not have valid data for this attribute."
+msgstr "你关注的球队在该属性上没有有效数据。"
+
+msgid "The item was deleted successfully."
+msgstr "删除成功。"
+
+msgid "The list of all players"
+msgstr "全部球员列表"
+
+msgid "There are no match records for the time being"
+msgstr "暂时没有比赛记录"
+
+msgid "There is no player information of this team for the time being."
+msgstr "该球队暂时没有球员信息。"
+
+msgid "Unfollow"
+msgstr "取消关注"
+
+msgid "Unfollow players"
+msgstr "取消关注球员"
+
+msgid "Unfollow teams"
+msgstr "取消关注球队"
+
+msgid "Unknown Player"
+msgstr "未知球员"
+
+msgid "User"
+msgstr "用户"
+
+msgid "User Dashboard"
+msgstr "用户功能界面"
+
+msgid "User function interface"
+msgstr "用户功能界面"
+
+msgid "Username"
+msgstr "用户名"
+
+msgid "Username already exists."
+msgstr "用户名已存在。"
+
+msgid "View"
+msgstr "查看"
+
+msgid "View All Players List"
+msgstr "查看全部球员列表"
+
+msgid "View Attributes"
+msgstr "查看属性"
+
+msgid "View Interested Players"
+msgstr "查看感兴趣的球员"
+
+msgid "View My Players"
+msgstr "查看我的球员"
+
+msgid "View My Team"
+msgstr "查看我的球队"
+
+msgid "View attributes"
+msgstr "查看属性"
+
+msgid "View followed players"
+msgstr "查看已关注球员"
+
+msgid "View followed teams"
+msgstr "查看已关注球队"
+
+msgid "View games of the followed teams"
+msgstr "查看关注球队的比赛"
+
+msgid "View my followed players"
+msgstr "查看我关注的球员"
+
+msgid "View my followed teams"
+msgstr "查看我关注的球队"
+
+msgid "Weight"
+msgstr "体重"
+
+msgid "Welcome to RealFootball"
+msgstr "欢迎使用 RealFootball"
+
+msgid "Welcome to use RealFootball"
+msgstr "欢迎使用 RealFootball"
+
+msgid "Welcome to use the RealFootball Manager platform."
+msgstr "欢迎使用 RealFootball 经理平台。"
+
+msgid "You are now logged in as a regular user."
+msgstr "你现在已以普通用户身份登录。"
+
+msgid "You can only manage one club at a time."
+msgstr "你一次只能执教一支球队。"
+
+msgid "You currently do not have an employment relationship with any club."
+msgstr "你目前与任何俱乐部都没有执教关系。"
+
+msgid ""
+"You have an employment relationship with the team "
+"<strong>%(team_name)s</strong>."
+msgstr "你与 <strong>%(team_name)s</strong> 球队有执教关系。"
+
+msgid "You have signed a contract with a club"
+msgstr "你已与一家俱乐部签约"
+
+msgid "Your Name"
+msgstr "你的姓名"
+
+msgid "Your application was submitted successfully."
+msgstr "你的申请已成功提交。"
+
+msgid "Your interested players do not have valid data for this attribute."
+msgstr "你感兴趣的球员在该属性上没有有效数据。"
+
+msgid "vs"
+msgstr "对"
+
+msgid "An unexpected error occurred."
+msgstr "发生了意外错误。"
+
+msgid "Page navigation"
+msgstr "分页导航"
+
+msgid "Clear all filters"
+msgstr "清除全部筛选条件"
+
+msgid "Reset"
+msgstr "重置"
+
+msgid "How this recommendation works"
+msgstr "推荐逻辑说明"
+
+msgid "Based on the players you marked as interested."
+msgstr "基于您关注的球员进行推荐。"
+
+msgid "We compute their average value for the chosen attribute."
+msgstr "我们计算这些球员在所选择属性上的平均值。"
+
+msgid ""
+"Recommended players are those within ±5 of that average, excluding ones you "
+"already follow."
+msgstr "推荐的球员为该属性值在平均值±5范围内、且您尚未关注的球员。"
+
+msgid ""
+"Tip: mark some players as interested first to get recommendations based on "
+"them."
+msgstr "提示：请先添加一些感兴趣的球员，系统才能据此为您推荐。"
+
+msgid "Continue Adding Players"
+msgstr "继续添加球员"
+
+msgid "Get Recommendations"
+msgstr "获取推荐"
+
+msgid "Player added to your interested list."
+msgstr "已将球员加入您的关注列表。"
+
+msgid "This player is already in your interested list."
+msgstr "该球员已在您的关注列表中。"
+
+msgid "Total"
+msgstr "共"
+
+msgid "players"
+msgstr "名球员"
+
+msgid "Page"
+msgstr "第"
+
+msgid "average"
+msgstr "平均"
+
+msgid "across"
+msgstr "跨"
+
+msgid "attribute records"
+msgstr "条属性记录"
+
+msgid "of"
+msgstr "来自"
+
+msgid "interested players"
+msgstr "个关注球员"
+
+msgid "range"
+msgstr "推荐范围"
+
+msgid "found"
+msgstr "找到"

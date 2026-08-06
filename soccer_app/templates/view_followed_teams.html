@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Followed teams" %} - RealFootball{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-9">
+    <h3 class="text-center text-primary mb-4">
+      <i class="fa-solid fa-shield-halved me-1"></i>{% trans "Followed team attributes" %}
+    </h3>
+
+    {% if has_data %}
+      <div class="row g-3">
+        {% for item in followed_teams %}
+          <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+              <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">{{ item.team.team_long_name }}</h5>
+              </div>
+              <div class="card-body">
+                {% if item.attributes %}
+                  <dl class="row mb-0 small">
+                    <dt class="col-6">{% trans "Build up play speed" %}</dt>
+                    <dd class="col-6">{{ item.attributes.buildupplayspeed|default:"—" }}</dd>
+                    <dt class="col-6">{% trans "Build up play passing" %}</dt>
+                    <dd class="col-6">{{ item.attributes.buildupplaypassing|default:"—" }}</dd>
+                    <dt class="col-6">{% trans "Chance creation passing" %}</dt>
+                    <dd class="col-6">{{ item.attributes.chancecreationpassing|default:"—" }}</dd>
+                    <dt class="col-6">{% trans "Defence pressure" %}</dt>
+                    <dd class="col-6">{{ item.attributes.defencepressure|default:"—" }}</dd>
+                    <dt class="col-6">{% trans "Defence aggression" %}</dt>
+                    <dd class="col-6">{{ item.attributes.defenceaggression|default:"—" }}</dd>
+                    <dt class="col-6">{% trans "Defence team width" %}</dt>
+                    <dd class="col-6">{{ item.attributes.defenceteamwidth|default:"—" }}</dd>
+                  </dl>
+                {% else %}
+                  <p class="text-muted mb-0">{% trans "No attribute data yet." %}</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="alert alert-secondary text-center">
+        {% trans "You haven't followed any teams yet." %}
+      </div>
+    {% endif %}
+
+    <div class="text-center mt-4">
+      <a href="{% url 'user_dashboard' %}" class="btn btn-outline-secondary">
+        <i class="fa-solid fa-arrow-left me-1"></i>{% trans "Back to Dashboard" %}
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

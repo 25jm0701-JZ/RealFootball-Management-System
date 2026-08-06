@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "My Team" %} - RealFootball{% endblock %}
+{% block content %}
+<h1 class="text-center mb-4">
+  <i class="fa-solid fa-people-group me-1"></i>{% trans "My Team" %}
+</h1>
+
+{% if not has_team %}
+<div class="card bg-light mx-auto" style="max-width: 640px;">
+  <div class="card-body text-center py-5">
+    <i class="fa-solid fa-futbol text-muted display-4 mb-3"></i>
+    <h3 class="text-muted">{% trans "You don't have a club yet" %}</h3>
+    <p class="text-muted">{% trans "Join a club to start managing your team" %}</p>
+    <a href="{% url 'manager_check_employment' %}" class="btn btn-primary mt-3">
+      <i class="fa-solid fa-plus me-1"></i>{% trans "Add Club" %}
+    </a>
+  </div>
+</div>
+{% else %}
+<div class="card shadow-sm">
+  <div class="card-header bg-primary text-white">
+    <h3 class="mb-0">{{ team.team_long_name }}</h3>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <h5 class="card-title">{% trans "Team Information" %}</h5>
+        <p><strong>{% trans "League" %}:</strong> {{ league_name|default:"—" }}</p>
+        <p><strong>{% trans "Team API ID" %}:</strong> {{ team.team_api_id }}</p>
+      </div>
+      <div class="col-md-6">
+        <h5 class="card-title">{% trans "Team Attributes" %}</h5>
+        {% if team_attr %}
+        <p><strong>{% trans "Build up play speed" %}:</strong> {{ team_attr.buildupplayspeed|default:"—" }}</p>
+        <p><strong>{% trans "Build up play passing" %}:</strong> {{ team_attr.buildupplaypassing|default:"—" }}</p>
+        <p><strong>{% trans "Chance creation passing" %}:</strong> {{ team_attr.chancecreationpassing|default:"—" }}</p>
+        <p><strong>{% trans "Defence pressure" %}:</strong> {{ team_attr.defencepressure|default:"—" }}</p>
+        <p><strong>{% trans "Defence team width" %}:</strong> {{ team_attr.defenceteamwidth|default:"—" }}</p>
+        {% else %}
+        <p class="text-muted">{% trans "No team attributes available" %}</p>
+        {% endif %}
+      </div>
+    </div>
+    <hr>
+    <h5 class="card-title">{% trans "Squad" %}</h5>
+    {% if players_with_attrs %}
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th scope="col">{% trans "Player Name" %}</th>
+            <th scope="col">{% trans "Overall" %}</th>
+            <th scope="col">{% trans "Birthday" %}</th>
+            <th scope="col">{% trans "Height" %}</th>
+            <th scope="col">{% trans "Weight" %}</th>
+            <th scope="col" class="text-center">{% trans "Actions" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in players_with_attrs %}
+          <tr>
+            <td>{{ item.player.player_name }}</td>
+            <td>{{ item.attributes.overall_rating|default:"—" }}</td>
+            <td>{{ item.player.birthday|default:"—" }}</td>
+            <td>{{ item.player.height|default:"—" }}</td>
+            <td>{{ item.player.weight|default:"—" }}</td>
+            <td class="text-center">
+              <a href="{% url 'manager_view_player_details' item.player.player_fifa_api_id %}"
+                 class="btn btn-sm btn-info">
+                <i class="fa-solid fa-eye me-1"></i>{% trans "View" %}
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="text-muted">{% trans "No players in your squad yet" %}</p>
+    {% endif %}
+  </div>
+  <div class="card-footer">
+    <div class="d-flex justify-content-between">
+      <a href="{% url 'manager_dashboard' %}" class="btn btn-secondary">
+        <i class="fa-solid fa-arrow-left me-1"></i>{% trans "Back" %}
+      </a>
+      <a href="{% url 'manager_view_my_players' %}" class="btn btn-primary">
+        <i class="fa-solid fa-users me-1"></i>{% trans "View My Players" %}
+      </a>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

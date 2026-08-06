@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "User Dashboard" %} - RealFootball{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card shadow-sm p-4">
+      <h2 class="text-center text-primary mb-2">
+        <i class="fa-solid fa-gauge-high me-1"></i>{% trans "User function interface" %}
+      </h2>
+      <p class="text-center text-muted mb-4">{% trans "Please select the operation you want to perform:" %}</p>
+
+      <div class="row g-3">
+        <div class="col-md-6 d-grid">
+          <a href="{% url 'follow_player' %}" class="btn btn-outline-success">
+            <i class="fa-solid fa-user-plus me-1"></i>{% trans "Follow players" %}
+          </a>
+        </div>
+        <div class="col-md-6 d-grid">
+          <a href="{% url 'follow_team' %}" class="btn btn-outline-success">
+            <i class="fa-solid fa-shield-halved me-1"></i>{% trans "Follow teams" %}
+          </a>
+        </div>
+        <div class="col-md-6 d-grid">
+          <a href="{% url 'view_followed_players' %}" class="btn btn-outline-primary">
+            <i class="fa-solid fa-list me-1"></i>{% trans "View followed players" %}
+          </a>
+        </div>
+        <div class="col-md-6 d-grid">
+          <a href="{% url 'view_followed_teams' %}" class="btn btn-outline-primary">
+            <i class="fa-solid fa-list me-1"></i>{% trans "View followed teams" %}
+          </a>
+        </div>
+        <div class="col-md-6 d-grid">
+          <a href="{% url 'view_followed_matches' %}" class="btn btn-outline-info">
+            <i class="fa-solid fa-calendar-days me-1"></i>{% trans "View games of the followed teams" %}
+          </a>
+        </div>
+        <div class="col-md-6 d-grid">
+          <a href="{% url 'unfollow_player' %}" class="btn btn-outline-danger">
+            <i class="fa-solid fa-user-minus me-1"></i>{% trans "Unfollow players" %}
+          </a>
+        </div>
+        <div class="col-md-6 d-grid">
+          <a href="{% url 'unfollow_team' %}" class="btn btn-outline-danger">
+            <i class="fa-solid fa-shield-halved me-1"></i>{% trans "Unfollow teams" %}
+          </a>
+        </div>
+        <div class="col-md-6 d-grid">
+          <a href="{% url 'recommend_team' %}" class="btn btn-outline-warning">
+            <i class="fa-solid fa-wand-magic-sparkles me-1"></i>{% trans "Teams that might be of interest" %}
+          </a>
+        </div>
+        <div class="col-md-6 d-grid mx-auto">
+          <a href="{% url 'guess_player' %}" class="btn btn-outline-dark">
+            <i class="fa-solid fa-circle-question me-1"></i>{% trans "Guess the player mini-game" %}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

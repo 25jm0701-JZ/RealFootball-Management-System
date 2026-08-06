@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Followed teams matches" %} - RealFootball{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-9">
+    <div class="card shadow-sm p-4">
+      <h3 class="text-center text-primary mb-4">
+        <i class="fa-solid fa-calendar-days me-1"></i>{% trans "View games of the followed teams" %}
+      </h3>
+
+      <!-- 筛选框 -->
+      <form method="get" class="mb-4">
+        <label class="form-label">{% trans "Select a team:" %}</label>
+        <select name="team_id" class="form-select" onchange="this.form.submit()">
+          <option value="">{% trans "All games" %}</option>
+          {% for team in teams %}
+            <option value="{{ team.team_api_id }}" {% if team.team_api_id|stringformat:"s" == selected_team_id %}selected{% endif %}>
+              {{ team.team_long_name }}
+            </option>
+          {% endfor %}
+        </select>
+      </form>
+
+      <!-- 比赛结果 -->
+      {% if has_data %}
+        <div class="table-responsive">
+          <table class="table table-hover table-sm text-center align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>{% trans "Date" %}</th>
+                <th>{% trans "Home team" %}</th>
+                <th></th>
+                <th>{% trans "Away team" %}</th>
+                <th>{% trans "Score" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for match in matches %}
+              <tr>
+                <td class="text-nowrap">{{ match.date }}</td>
+                <td class="text-end">{{ match.home_team_name }}</td>
+                <td class="text-muted">{% trans "vs" %}</td>
+                <td class="text-start">{{ match.away_team_name }}</td>
+                <td class="fw-bold text-primary">{{ match.home_team_goal }} - {{ match.away_team_goal }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="alert alert-secondary text-center">
+          {% trans "There are no match records for the time being" %}
+        </div>
+      {% endif %}
+
+      <div class="text-center mt-3">
+        <a href="{% url 'user_dashboard' %}" class="btn btn-outline-secondary">
+          <i class="fa-solid fa-arrow-left me-1"></i>{% trans "Back to Dashboard" %}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Check Employment" %} - RealFootball{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-7">
+    <div class="card shadow-sm">
+      <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">
+          <i class="fa-solid fa-handshake me-1"></i>{% trans "Check Employment" %}
+        </h4>
+      </div>
+      <div class="card-body">
+        {% if has_employment %}
+          <div class="alert alert-success">
+            <h5 class="alert-heading">
+              <i class="fa-solid fa-circle-check me-1"></i>{% trans "You have signed a contract with a club" %}
+            </h5>
+            <p class="mb-0">
+              {% blocktranslate with team_name=team.team_long_name %}You have an employment relationship with the team <strong>{{ team_name }}</strong>.{% endblocktranslate %}
+            </p>
+          </div>
+        {% else %}
+          <div class="alert alert-info">
+            <h5 class="alert-heading">
+              <i class="fa-solid fa-circle-info me-1"></i>{% trans "No employment relationship" %}
+            </h5>
+            <p class="mb-0">{% trans "You currently do not have an employment relationship with any club." %}</p>
+          </div>
+
+          <form method="get" class="mb-4">
+            <div class="form-group">
+              <label for="league_id" class="form-label">{% trans "Select League:" %}</label>
+              <select id="league_id" name="league_id" class="form-select" onchange="this.form.submit()">
+                <option value="">{% trans "Please select" %}</option>
+                {% for league in leagues %}
+                  <option value="{{ league.id }}" {% if league_id == league.id|stringformat:"s" %}selected{% endif %}>
+                    {{ league.name }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+          </form>
+
+          {% if show_teams %}
+            <form method="post">
+              {% csrf_token %}
+              <input type="hidden" name="league_id" value="{{ league_id }}">
+              <div class="form-group">
+                <label for="team_api_id" class="form-label">{% trans "Select Team:" %}</label>
+                <select id="team_api_id" name="team_api_id" class="form-select" required>
+                  <option value="">{% trans "Please select" %}</option>
+                  {% for team in teams %}
+                    <option value="{{ team.team_api_id }}">{{ team.team_long_name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary mt-3">
+                <i class="fa-solid fa-check me-2"></i>{% trans "Employ this club" %}
+              </button>
+            </form>
+          {% elif league_id %}
+            <div class="alert alert-warning">{% trans "No teams available in this league." %}</div>
+          {% endif %}
+        {% endif %}
+      </div>
+      <div class="card-footer bg-light">
+        <a href="{% url 'manager_dashboard' %}" class="btn btn-secondary">
+          <i class="fa-solid fa-arrow-left me-1"></i>{% trans "Back to Manager Dashboard" %}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

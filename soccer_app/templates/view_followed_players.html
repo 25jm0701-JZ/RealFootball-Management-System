@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Followed players" %} - RealFootball{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-9">
+    <h3 class="text-center text-primary mb-4">
+      <i class="fa-solid fa-user me-1"></i>{% trans "Followed players" %}
+    </h3>
+
+    {% if has_data %}
+      <div class="row g-3">
+        {% for item in followed_players %}
+          <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+              <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">{{ item.player.player_name }}</h5>
+              </div>
+              <div class="card-body">
+                {% if item.attributes %}
+                  <dl class="row mb-0 small">
+                    <dt class="col-6">{% trans "Overall Rating" %}</dt>
+                    <dd class="col-6">{{ item.attributes.overall_rating|default:"—" }}</dd>
+                    <dt class="col-6">{% trans "Potential" %}</dt>
+                    <dd class="col-6">{{ item.attributes.potential|default:"—" }}</dd>
+                    <dt class="col-6">{% trans "Preferred Foot" %}</dt>
+                    <dd class="col-6">{{ item.attributes.preferred_foot|default:"—" }}</dd>
+                    <dt class="col-6">{% trans "Attacking Work Rate" %}</dt>
+                    <dd class="col-6">{{ item.attributes.attacking_work_rate|default:"—" }}</dd>
+                    <dt class="col-6">{% trans "Defensive Work Rate" %}</dt>
+                    <dd class="col-6">{{ item.attributes.defensive_work_rate|default:"—" }}</dd>
+                    <dt class="col-6">{% trans "Ball Control" %}</dt>
+                    <dd class="col-6">{{ item.attributes.ball_control|default:"—" }}</dd>
+                    <dt class="col-6">{% trans "Dribbling" %}</dt>
+                    <dd class="col-6">{{ item.attributes.dribbling|default:"—" }}</dd>
+                    <dt class="col-6">{% trans "Sprint Speed" %}</dt>
+                    <dd class="col-6">{{ item.attributes.sprint_speed|default:"—" }}</dd>
+                  </dl>
+                {% else %}
+                  <p class="text-muted mb-0">{% trans "No attribute data yet." %}</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="alert alert-secondary text-center">
+        {% trans "You haven't followed any players yet." %}
+      </div>
+    {% endif %}
+
+    <div class="text-center mt-4">
+      <a href="{% url 'user_dashboard' %}" class="btn btn-outline-secondary">
+        <i class="fa-solid fa-arrow-left me-1"></i>{% trans "Back to Dashboard" %}
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

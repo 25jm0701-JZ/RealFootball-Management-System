@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Register" %} - RealFootball{% endblock %}
+{% block body_class %}bg-light d-flex flex-column min-vh-100{% endblock %}
+{% block main_class %}container py-5 flex-grow-1 d-flex align-items-center{% endblock %}
+{% block content %}
+<div class="row justify-content-center w-100">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-sm p-4">
+      <h3 class="text-center text-success mb-4">
+        <i class="fa-solid fa-user-plus me-1"></i>{% trans "Register a new account" %}
+      </h3>
+
+      {% if error %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          {{ error }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endif %}
+
+      <form method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+
+        <div class="mb-3">
+          <label class="form-label">{% trans "Identity" %}</label>
+          <select name="identity" class="form-select" required>
+            <option value="user" {% if request.POST.identity == 'user' %}selected{% endif %}>{% trans "User" %}</option>
+            <option value="manager" {% if request.POST.identity == 'manager' %}selected{% endif %}>{% trans "Football Manager" %}</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">{% trans "Username" %}</label>
+          <input type="text" name="username" value="{{ request.POST.username }}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">{% trans "Your Name" %}</label>
+          <input type="text" name="name" value="{{ request.POST.name }}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">{% trans "Age" %}</label>
+          <input type="number" name="age" value="{{ request.POST.age }}" class="form-control" min="1" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">{% trans "Password" %}</label>
+          <input type="password" name="password" class="form-control" required>
+        </div>
+
+        <div class="d-grid mt-4">
+          <button type="submit" class="btn btn-success btn-lg">{% trans "Register" %}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

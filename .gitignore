@@ -1,0 +1,25 @@
+# ---- Python / Django ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+*.log
+
+# ---- 数据库（本项目核心数据库 300MB，不纳入版本控制，见 README「数据库说明与获取」）----
+soccer.db
+soccer.db-journal
+soccer.db-wal
+soccer.db-shm
+*.db
+*.sqlite3
+
+# ---- 系统 / 编辑器 ----
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# ---- 本地 Claude Code 配置（本机工具配置，不对外）----
+.claude/

@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load custom_filters %}
+{% block title %}{% trans "All players" %} - RealFootball{% endblock %}
+{% block content %}
+<div class="col-lg-11 mx-auto">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">
+        <i class="fa-solid fa-users me-1"></i>{% trans "The list of all players" %}
+      </h4>
+    </div>
+    <div class="card-body">
+      <!-- 筛选和搜索区域 -->
+      <div class="bg-light p-3 rounded mb-3">
+        <form method="get" class="row g-3 align-items-end">
+          <div class="col-md-4">
+            <label for="league_id" class="form-label">{% trans "League:" %}</label>
+            <select id="league_id" name="league_id" class="form-select"
+                    onchange="this.form.team_api_id.value=''; this.form.search_query.value=''; this.form.submit()">
+              <option value="">{% trans "All" %}</option>
+              {% for league in leagues %}
+                <option value="{{ league.id }}" {% if selected_league_id == league.id|stringformat:"s" %}selected{% endif %}>
+                  {{ league.name }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="team_api_id" class="form-label">{% trans "Team:" %}</label>
+            <select id="team_api_id" name="team_api_id" class="form-select" onchange="this.form.submit()">
+              <option value="">{% trans "All" %}</option>
+              {% for team in teams %}
+                <option value="{{ team.team_api_id }}" {% if selected_team_api_id == team.team_api_id|stringformat:"s" %}selected{% endif %}>
+                  {{ team.team_long_name }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="search_query" class="form-label">{% trans "Search Players:" %}</label>
+            <div class="input-group">
+              <input type="text" id="search_query" name="search_query" value="{{ search_query }}"
+                     class="form-control" placeholder="{% trans 'Search by player name' %}">
+              <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-magnifying-glass"></i> {% trans "Search" %}
+              </button>
+              <a href="{% url 'manager_view_all_players' %}" class="btn btn-outline-secondary"
+                 title="{% trans 'Clear all filters' %}">
+                <i class="fa-solid fa-rotate-left"></i> {% trans "Reset" %}
+              </a>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- 球员列表 -->
+      {% if has_players %}
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="text-muted">
+            {% trans "Total" %} {{ players.paginator.count }} {% trans "players" %}
+            {% if players.paginator.num_pages > 1 %}
+              · {% trans "Page" %} {{ players.number }}/{{ players.paginator.num_pages }}
+            {% endif %}
+          </span>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered align-middle">
+            <thead>
+              <tr>
+                <th scope="col">{% trans "Player's name" %}</th>
+                <th scope="col">{% trans "Team" %}</th>
+                <th scope="col" class="text-center">{% trans "Operation" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for player in players %}
+              <tr>
+                <td>{{ player.player_name }}</td>
+                <td>{{ team_name_by_id|field_value:player.team_api_id|default:"—" }}</td>
+                <td class="text-center">
+                  <a href="{% url 'manager_view_player_attributes' player.player_fifa_api_id %}"
+                     class="btn btn-outline-primary btn-sm">
+                    <i class="fa-solid fa-eye"></i> {% trans "View attributes" %}
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 分页 -->
+        {% if players.paginator.num_pages > 1 %}
+        <nav aria-label="{% trans 'Page navigation' %}" class="mt-3">
+          <ul class="pagination justify-content-center">
+            {% if players.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?{% if query_params %}{{ query_params }}&{% endif %}page={{ players.previous_page_number }}">&laquo;</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+            {% endif %}
+
+            {% for num in page_numbers %}
+              {% if num == '…' %}
+                <li class="page-item disabled"><span class="page-link">…</span></li>
+              {% elif num == players.number %}
+                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+              {% else %}
+                <li class="page-item">
+                  <a class="page-link" href="?{% if query_params %}{{ query_params }}&{% endif %}page={{ num }}">{{ num }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+
+            {% if players.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?{% if query_params %}{{ query_params }}&{% endif %}page={{ players.next_page_number }}">&raquo;</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+            {% endif %}
+          </ul>
+        </nav>
+        {% endif %}
+      {% else %}
+        <div class="alert alert-warning text-center">
+          <i class="fa-solid fa-triangle-exclamation me-2"></i>{% trans "No matching player was found." %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
