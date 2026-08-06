@@ -1,6 +1,6 @@
 # RealFootball 足球管理系统
 
-> 大学二年级《数据库》课程作业项目 · Django + SQLite
+> 大二数据库DBMS(Data Base Management System）课程作业项目 · Django + SQLite
 
 一个基于 Django 的足球信息管理系统，面向**普通球迷**与**足球经理**两类用户提供不同的功能：球迷可以关注球队 / 球员、查看比赛、玩"猜球员"小游戏并获得球队推荐；足球经理可以管理感兴趣的球员、申请执教球队、浏览与搜索全部球员并获得球员推荐。系统以数据库为核心，底层使用 Kaggle 公开的欧洲足球数据集（约 22 万条记录，核心表 18 万+ 行球员能力数据）。
 
@@ -8,7 +8,7 @@
 
 ## 项目来源与分工说明
 
-本项目为大学二年级《数据库》课程作业项目，基于一个已有的初版进行修改完善后开源。
+本项目为大二DBMS课程作业项目，基于一个已有的初版进行修改完善后开源。
 
 - **初版**：由课程小组共同完成。
 - **修改与完善**：由 [@25jm0701-JZ](https://github.com/25jm0701-JZ) 在初版基础上完成，包括功能增强、页面与交互优化、数据库结构整理以及本项目文档编写。
@@ -162,10 +162,10 @@ python manage.py runserver
 
 数据库中预置的演示账号（密码请联系作者，或直接在 `/register/` 注册新账号）：
 
-| 身份 | 用户名 |
-|---|---|
-| 普通球迷 | `fantest` |
-| 足球经理 | `coach01` |
+| 身份 | 用户名 | 密码
+|---|---|---|
+| 普通球迷 | `fantest` |pass123
+| 足球经理 | `coach01` |pass123
 
 ---
 
@@ -193,3 +193,7 @@ RealFootball-Management-System/
 ## 致谢
 
 - 数据来源：[Kaggle · European Soccer Database](https://www.kaggle.com/datasets/hugomathien/soccer/data)（[hugomathien](https://www.kaggle.com/hugomathien)）
+- 作者当时的组长yx同学，他对此项目贡献最大
+
+## 想说的话
+希望此项目能帮助到正迷茫的学生，尤其是正在上DBMS这门课以及恰好对足球感兴趣的你
