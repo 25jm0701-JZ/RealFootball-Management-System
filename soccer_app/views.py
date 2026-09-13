@@ -21,6 +21,7 @@ from django.utils.http import urlencode
 from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_exempt
 
+from .agent_tools import recommend_players_for_request
 from .models import (
     Employ, Follow, FootballManager, Interested, League, ManagerAccountUser,
     Match, Player, PlayerAttributes, Subscribe, Team, TeamAttributes,
@@ -871,6 +872,39 @@ def recommend_player_view(request):
         'avg_value': avg_value,
         'range_low': (avg_value - 5) if avg_value is not None else None,
         'range_high': (avg_value + 5) if avg_value is not None else None,
+    })
+
+
+@manager_required
+def manager_squad_agent_view(request):
+    manager_id = request.session.get('manager_id')
+    query = request.GET.get('q', '').strip()
+    agent_response = None
+
+    if request.method == 'POST':
+        player_fifa_api_id = request.POST.get('player_fifa_api_id')
+        original_query = request.POST.get('q', '').strip()
+        if player_fifa_api_id:
+            if not Interested.objects.filter(
+                    manager_id=manager_id,
+                    player_fifa_api_id=player_fifa_api_id).exists():
+                Interested.objects.create(
+                    manager_id=manager_id,
+                    player_fifa_api_id=player_fifa_api_id)
+                messages.success(request, _('Player added to your interested list.'))
+            else:
+                messages.warning(request, _('This player is already in your interested list.'))
+        redirect_url = 'manager_squad_agent'
+        if original_query:
+            return redirect(f"{redirect_url}?{urlencode({'q': original_query})}")
+        return redirect(redirect_url)
+
+    if query:
+        agent_response = recommend_players_for_request(manager_id, query)
+
+    return render(request, 'manager_squad_agent.html', {
+        'query': query,
+        'agent_response': agent_response,
     })
 
 

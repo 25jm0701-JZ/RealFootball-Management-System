@@ -43,6 +43,7 @@
 | 浏览全部球员 | 按联赛 / 球队筛选 + 关键字模糊搜索，分页展示（每页 50 条） |
 | 查看球员详情 | 展示球员最新能力快照与全部技术 / 门将属性 |
 | 球员推荐 | 以感兴趣球员某属性平均值为基准，推荐水平相近的球员（可一键加入兴趣名单） |
+| Squad Agent | 输入自然语言引援需求，系统解析为球员属性权重并调用数据库工具，返回候选球员、匹配分与推荐理由 |
 
 ### 🌐 通用功能
 
@@ -61,6 +62,68 @@
 | 数据库 | SQLite（ORM 为 Django ORM，`managed=False` 直连既有数据库） |
 | 前端 | Bootstrap 5.3 · FontAwesome 6（CDN）· Django 模板 |
 | 国际化 | Django i18n（`locale/zh_Hans`） |
+| Agent 模块 | DeepSeek Planner · 工具路由 · 本地 SQLite 检索与属性加权推荐 |
+
+---
+
+## Squad Agent 实现说明
+
+本次新增 `Squad Agent`，用于把原本的“足球数据库管理系统”扩展为一个面向足球经理的 AI Agent 工具。该模块位于：
+
+- `soccer_app/agent_tools.py`：Agent 工具层，负责调用 DeepSeek、解析结构化计划、读取球员能力快照、计算候选球员匹配分。
+- `soccer_app/views.py`：新增 `manager_squad_agent_view`，负责处理经理端查询与“一键加入兴趣名单”。
+- `soccer_app/urls.py`：新增 `/manager_squad_agent/` 路由。
+- `soccer_app/templates/manager_squad_agent.html`：新增 Squad Agent 页面，展示 Planner、Tools、搜索空间、候选球员和推荐证据。
+- `soccer_app/templates/base.html` 与 `manager_dashboard.html`：新增 Squad Agent 导航入口。
+
+Agent 工作流如下：
+
+1. 经理输入自然语言需求，例如 `Find an under 25 fast winger with strong crossing and dribbling`。
+2. 系统优先调用 DeepSeek Chat Completions API，将自然语言解析成结构化 JSON 计划，包括 `matched_intents`、`weights`、`max_age` 与 `rationale`。
+3. 本地工具读取 `player_attributes` 中每名球员最新一条能力快照，并结合 `player`、`team`、`league` 表补齐球员、球队和联赛信息。
+4. 系统根据 DeepSeek 返回的属性权重计算 Agent Score，输出候选球员、年龄、球队、联赛、匹配分和关键推荐证据。
+5. 如果没有配置 API Key，系统自动降级为本地关键词解析器，仍可完成基本推荐。
+
+重要设计原则：DeepSeek 只负责“理解需求并生成检索计划”，不直接访问数据库，也不生成最终球员结果；最终推荐必须来自本地 SQLite 数据库，因此不会凭空编造球员或球队信息。
+
+一次测试样例：
+
+- 输入需求：`Find an under 25 fast winger with strong crossing and dribbling`
+- DeepSeek Planner 识别意图：`fast winger`、`strong crossing`、`strong dribbling`、`under 25`
+- 调用工具：`call_deepseek_planner` → `load_latest_player_attribute_snapshots` → `rank_players_by_weighted_profile`
+- 本地扫描：7992 个最新球员能力快照
+- 示例结果：Neymar、Gerard Deulofeu、Raheem Sterling、David Alaba、Kingsley Coman
+
+---
+
+## Squad Agent DeepSeek 配置
+
+`Squad Agent` 支持两种运行模式：
+
+- 未配置 API Key：使用本地关键词解析器，将自然语言需求映射为球员属性权重。
+- 配置 API Key：调用 DeepSeek Chat Completions API，由大模型把自然语言需求解析成结构化 JSON 计划，再由本地 Django 工具查询 SQLite 并排序。
+
+Windows PowerShell 示例：
+
+```powershell
+$env:DEEPSEEK_API_KEY="你的_api_key"
+$env:SOCCER_AGENT_MODEL="deepseek-chat"
+python manage.py runserver
+```
+
+模型只负责生成检索计划，不直接访问数据库，因此不会编造数据库结果。
+
+请不要把真实 API Key 写入代码、README 或提交到 Git 仓库。项目已在 `.gitignore` 中忽略 `.env` 与 `.env.*`，如需本地持久化配置，可以将环境变量保存在本机未提交的 `.env` 文件中。
+
+---
+
+## 数据日期与历史口径
+
+本项目使用的是 Kaggle `European Soccer Database` 的历史数据，不是实时或最新版足球数据库。`player_attributes` 和 `team_attributes` 是时间序列快照表，系统会取每名球员或球队在数据库中的最新快照作为当前项目内的“最新能力 / 战术数据”。
+
+由于数据库不是 2026 年实时数据，所有年龄、能力值、球队归属和联赛信息都应按该历史数据集中记录的快照日期理解。`Squad Agent` 中的年龄筛选也按球员最新能力快照的年份计算，而不是按系统当前年份计算。例如，当某名球员的最新能力快照为 2015 年，系统会按 2015 年与其出生日期计算年龄，从而保证“25 岁以下”等条件符合该数据集当年的语境。
+
+因此，页面和推荐结果中的“最新”均表示“本数据库截至其历史快照日期的最新”，不是现实世界当前最新阵容或能力值。
 
 ---
 

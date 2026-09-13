@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Squad Agent" %} - RealFootball{% endblock %}
+{% block content %}
+<div class="col-lg-10 mx-auto">
+  <div class="card shadow-sm">
+    <div class="card-header bg-dark text-white">
+      <h4 class="mb-0">
+        <i class="fa-solid fa-robot me-1"></i>{% trans "Squad Agent" %}
+      </h4>
+    </div>
+    <div class="card-body">
+      <form method="GET" class="mb-4">
+        <label for="q" class="form-label fw-semibold">{% trans "Describe the player you need" %}</label>
+        {% trans "Example: I need a young fast winger with good crossing" as query_placeholder %}
+        <div class="input-group">
+          <input
+            type="text"
+            name="q"
+            id="q"
+            class="form-control"
+            value="{{ query }}"
+            placeholder="{{ query_placeholder }}"
+          >
+          <button class="btn btn-dark" type="submit">
+            <i class="fa-solid fa-magnifying-glass me-1"></i>{% trans "Ask Agent" %}
+          </button>
+        </div>
+      </form>
+
+      <div class="alert alert-light border small">
+        <h6 class="mb-2">
+          <i class="fa-solid fa-screwdriver-wrench me-1"></i>{% trans "Agent workflow" %}
+        </h6>
+        <div class="mb-1">{% trans "Natural language request -> DeepSeek planner or fallback parser -> player-attribute tools -> ranked candidates -> explanation." %}</div>
+        <div class="text-muted">{% trans "Set DEEPSEEK_API_KEY to enable the model planner. Database lookup and ranking stay local." %}</div>
+      </div>
+
+      {% if agent_response %}
+        <div class="row g-3 mb-4">
+          <div class="col-md-4">
+            <div class="border rounded p-3 h-100">
+              <div class="text-muted small">{% trans "Interpreted intents" %}</div>
+              <div class="fw-semibold">
+                {{ agent_response.plan.matched_intents|join:", " }}
+              </div>
+              <div class="small text-muted mt-1">{% trans "Planner" %}: {{ agent_response.plan.source }}</div>
+              {% if agent_response.plan.max_age %}
+                <div class="small text-muted mt-1">{% trans "Age filter: under" %} {{ agent_response.plan.max_age }}</div>
+              {% endif %}
+              {% if agent_response.plan.rationale %}
+                <div class="small text-muted mt-1">{{ agent_response.plan.rationale }}</div>
+              {% endif %}
+              {% if agent_response.plan.planner_error %}
+                <div class="small text-warning mt-1">{% trans "DeepSeek fallback" %}: {{ agent_response.plan.planner_error }}</div>
+              {% endif %}
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="border rounded p-3 h-100">
+              <div class="text-muted small">{% trans "Tools called" %}</div>
+              <div class="fw-semibold">{{ agent_response.tools_called|join:" -> " }}</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="border rounded p-3 h-100">
+              <div class="text-muted small">{% trans "Search space" %}</div>
+              <div class="fw-semibold">{% blocktrans with count=agent_response.scanned_players %}{{ count }} latest player snapshots scanned{% endblocktrans %}</div>
+            </div>
+          </div>
+        </div>
+
+        {% if agent_response.results %}
+          <div class="table-responsive">
+            <table class="table table-hover table-bordered align-middle">
+              <thead class="table-dark">
+                <tr>
+                  <th>{% trans "Player" %}</th>
+                  <th>{% trans "Team" %}</th>
+                  <th>{% trans "Age" %}</th>
+                  <th class="text-end">{% trans "Agent Score" %}</th>
+                  <th>{% trans "Why matched" %}</th>
+                  <th class="text-center">{% trans "Action" %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in agent_response.results %}
+                  <tr>
+                    <td>
+                      <div class="fw-semibold">{{ item.player.player_name }}</div>
+                      <div class="small text-muted">{% trans "Overall" %} {{ item.overall|floatformat:0 }} · {% trans "Potential" %} {{ item.potential|floatformat:0 }}</div>
+                    </td>
+                    <td>
+                      <div>{{ item.team_name }}</div>
+                      <div class="small text-muted">{{ item.league_name }}</div>
+                    </td>
+                    <td>{{ item.age|default:"-" }}</td>
+                    <td class="text-end fw-semibold">{{ item.score|floatformat:1 }}</td>
+                    <td>
+                      {% for label, value, weight in item.evidence %}
+                        <span class="badge text-bg-light border me-1">{{ label }} {{ value|floatformat:0 }}</span>
+                      {% endfor %}
+                    </td>
+                    <td class="text-center">
+                      <form method="POST" class="d-inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="player_fifa_api_id" value="{{ item.player.player_fifa_api_id }}">
+                        <input type="hidden" name="q" value="{{ query }}">
+                        <button class="btn btn-sm btn-success" type="submit">
+                          <i class="fa-solid fa-heart me-1"></i>{% trans "Add" %}
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="alert alert-secondary text-center">{% trans "No players matched this request. Try a broader description." %}</div>
+        {% endif %}
+      {% endif %}
+    </div>
+    <div class="card-footer bg-light">
+      <a href="{% url 'manager_dashboard' %}" class="btn btn-secondary">
+        <i class="fa-solid fa-arrow-left me-1"></i>{% trans "Back to Manager Dashboard" %}
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

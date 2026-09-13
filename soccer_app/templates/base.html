@@ -37,6 +37,9 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'recommend_player_view' %}">{% trans "Player Recommendations" %}</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'manager_squad_agent' %}">{% trans "Squad Agent" %}</a>
+          </li>
         {% elif request.session.user_id %}
           <li class="nav-item">
             <a class="nav-link {% if request.resolver_match.url_name == 'user_dashboard' %}active{% endif %}"

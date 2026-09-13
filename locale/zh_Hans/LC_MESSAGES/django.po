@@ -689,3 +689,118 @@ msgstr "推荐范围"
 
 msgid "found"
 msgstr "找到"
+
+msgid "Squad Agent"
+msgstr "阵容智能体"
+
+msgid "Describe the player you need"
+msgstr "描述你需要的球员"
+
+msgid "Example: I need a young fast winger with good crossing"
+msgstr "示例：我想找一个年轻、速度快、传中好的边锋"
+
+msgid "Ask Agent"
+msgstr "询问智能体"
+
+msgid "Agent workflow"
+msgstr "智能体工作流"
+
+msgid ""
+"Natural language request -> DeepSeek planner or fallback parser -> player-"
+"attribute tools -> ranked candidates -> explanation."
+msgstr "自然语言需求 -> DeepSeek 规划器或备用解析器 -> 球员属性工具 -> 候选球员排序 -> 推荐解释。"
+
+msgid ""
+"Set DEEPSEEK_API_KEY to enable the model planner. Database lookup and ranking "
+"stay local."
+msgstr "设置 DEEPSEEK_API_KEY 可启用大模型规划器。数据库检索和排序仍在本地完成。"
+
+msgid "Interpreted intents"
+msgstr "解析出的意图"
+
+msgid "Planner"
+msgstr "规划器"
+
+msgid "Age filter: under"
+msgstr "年龄筛选：低于"
+
+msgid "DeepSeek fallback"
+msgstr "DeepSeek 回退"
+
+msgid "Tools called"
+msgstr "调用的工具"
+
+msgid "Search space"
+msgstr "搜索空间"
+
+msgid "%(count)s latest player snapshots scanned"
+msgstr "已扫描 %(count)s 条最新球员快照"
+
+msgid "Player"
+msgstr "球员"
+
+msgid "Agent Score"
+msgstr "智能体评分"
+
+msgid "Why matched"
+msgstr "匹配原因"
+
+msgid "Add"
+msgstr "添加"
+
+msgid "No players matched this request. Try a broader description."
+msgstr "没有球员匹配该需求。请尝试更宽泛的描述。"
+
+msgid "DeepSeek planner"
+msgstr "DeepSeek 规划器"
+
+msgid "keyword intent parser"
+msgstr "关键词意图解析器"
+
+msgid "latest player snapshots"
+msgstr "最新球员快照"
+
+msgid "weighted player ranking"
+msgstr "加权球员排序"
+
+msgid "Sprint Speed"
+msgstr "冲刺速度"
+
+msgid "Acceleration"
+msgstr "加速度"
+
+msgid "Crossing"
+msgstr "传中"
+
+msgid "Finishing"
+msgstr "射门终结"
+
+msgid "Dribbling"
+msgstr "盘带"
+
+msgid "Ball Control"
+msgstr "控球"
+
+msgid "Stamina"
+msgstr "体能"
+
+msgid "Short Passing"
+msgstr "短传"
+
+msgid "Long Passing"
+msgstr "长传"
+
+msgid "Vision"
+msgstr "视野"
+
+msgid "Standing Tackle"
+msgstr "站立抢断"
+
+msgid "Sliding Tackle"
+msgstr "滑铲"
+
+msgid "Interceptions"
+msgstr "拦截"
+
+msgid "Marking"
+msgstr "盯人"

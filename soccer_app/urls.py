@@ -30,4 +30,5 @@ urlpatterns = [
     path('manager_delete_interested_player/<int:player_fifa_api_id>/', views.manager_delete_interested_player, name='manager_delete_interested_player'),
     path('delete_success/', views.delete_success, name='delete_success'),  # 添加删除成功页面
     path('recommend_player/', views.recommend_player_view, name='recommend_player_view'),
+    path('manager_squad_agent/', views.manager_squad_agent_view, name='manager_squad_agent'),
 ]
