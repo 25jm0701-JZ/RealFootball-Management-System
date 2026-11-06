@@ -173,12 +173,8 @@ Open http://127.0.0.1:8000/ in your browser. Register or log in on first visit.
 
 ## Demo Accounts
 
-Pre-seeded demo accounts in the database (ask the author for passwords, or register a new account at `/register/`):
-
-| Identity | Username |
-|---|---|
-| Regular fan | `fantest` |
-| Football manager | `coach01` |
+The database ships with two demo accounts (regular fan `fantest`, football manager `coach01`);
+their **passwords are not published**. Register a new account at `/register/` instead — it has exactly the same features.
 
 ---
 
