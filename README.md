@@ -158,36 +158,49 @@ python manage.py runserver
 
 ---
 
-## 数据库说明与获取（重要）
+## 数据库重建（重要）
 
-项目使用 SQLite 数据库 `soccer.db`（约 **300MB**），因超出 GitHub 单文件限制（100MB），**该文件不包含在本仓库中**。克隆后需要先获取数据库才能运行。
+项目使用 SQLite 数据库 `soccer.db`（约 **300MB**），超过 GitHub 单文件 100MB 上限，因此不入库。仓库里放的是**完整重建脚本**，照下面三步即可重新生成，不依赖任何外部交付物。
 
 ### 数据来源
 
 原始球员 / 球队 / 比赛数据来自 Kaggle 公开数据集
-[European Soccer Database（hugomathien/soccer）](https://www.kaggle.com/datasets/hugomathien/soccer/data)。
+[European Soccer Database（hugomathien/soccer）](https://www.kaggle.com/datasets/hugomathien/soccer/data)，
+解压后是一个 `database.sqlite`，包含 7 张表，行数与本项目一致：
+`country` 11 / `league` 11 / `team` 299 / `player` 11,060 /
+`player_attributes` 183,978 / `team_attributes` 1,458 / `match` 25,979。
 
-> 本项目并非直接使用该数据集，而是在其基础上进行了改造：
-> - `team` 表新增 `league_id` 字段；
-> - `player` 表新增 `team_api_id`、`league_id` 字段；
-> - `match` 表的统计字段拆分为主队 / 客队两套（如 `shoton1` / `shoton2`）；
-> - 新增 8 张业务表（`user`、`follow`、`subscribe`、`employ` 等）。
->
-> 完整结构见 [schema.sql](schema.sql)。
+### 重建步骤
 
-### 获取 soccer.db（二选一）
+```bash
+# 1. 下载数据集（需要 Kaggle 账号，也可以在网页上直接点 Download）
+kaggle datasets download -d hugomathien/soccer
+unzip soccer.zip                 # 得到 database.sqlite
 
-**方式一（推荐）：直接使用现成的 soccer.db**
+# 2. 拷成项目数据库
+cp database.sqlite soccer.db
 
-由于业务表与演示数据不在 Kaggle 数据集中，推荐**联系作者获取现成的 `soccer.db`**（已包含完整业务表与演示账号）。拿到后将文件放入**项目根目录**（与 `manage.py` 同级）即可。
+# 3. 补派生列 + 建业务表 + 灌演示数据
+sqlite3 soccer.db < rebuild_data.sql
+sqlite3 soccer.db < demo_data.sql
+```
 
-**方式二：自行从 Kaggle 数据重建**
+三步之后再 `python manage.py runserver` 即可运行。
 
-1. 在 [Kaggle 页面](https://www.kaggle.com/datasets/hugomathien/soccer/data) 下载数据集压缩包并解压；
-2. 使用 SQLite 工具（如 `sqlite3`、DB Browser for SQLite）导入 `Country`、`League`、`Team`、`Player`、`Match`、`Team_Attributes`、`Player_Attributes` 数据；
-3. 按 [schema.sql](schema.sql) 完成结构改造（见上文"数据来源"中的 4 点差异）；
-4. 执行 [schema.sql](schema.sql) 中「第二部分：业务表」的建表语句，创建 `user` / `follow` / `subscribe` / `employ` / `interested` 等业务表；
-5. 执行 `demo_data.sql` 导入演示业务数据（8 张业务表共 20 行：演示账号、经理、关注、应聘记录）。该文件已从原 `soccer.db` 导出，是 Kaggle 数据集中没有、无法重新下载的部分。
+### 改造了哪些（[rebuild_data.sql](rebuild_data.sql) 做的事）
+
+| 改动 | 做法 |
+|---|---|
+| `team.league_id` | 从 `match` 统计每个队出场次数最多的联赛 |
+| `player.team_api_id` / `player.league_id` | 从 `match` 的首发名单（`home_player_1..11` / `away_player_1..11`）取每名球员**最后一次出场**所在的球队，联赛由球队带出 |
+| `match` 主客队统计 | 原表每场只有一套球队统计（主队口径），本项目拆成 `shoton1/shoton2` 等两组：`*1` 写入原值，`*2` 留空 |
+| 查询索引 | `player_name`、`team_api_id`、`league_id`、`player_attributes(player_fifa_api_id)` 四个索引，球员搜索与筛选靠它们 |
+| 8 张业务表 + 演示数据 | `demo_data.sql`：8 张表共 20 行（演示账号、经理、关注、应聘记录），Kaggle 数据集里没有 |
+
+> **已知缺口**：Kaggle 数据集只提供主队一侧的比赛技术统计，重建后 `shoton2` 这类客队列为空。
+> 原 `soccer.db` 中这部分数据的来源不在公开数据集内，无法通过重建恢复；页面涉及客队统计的地方会显示为空。
+
+完整表结构与字段说明见 [schema.sql](schema.sql)，核心查询见 [queries.sql](queries.sql)。
 
 ---
 
@@ -196,7 +209,7 @@ python manage.py runserver
 ### 环境要求
 
 - Python 3.10+
-- 已获取 `soccer.db`（见上文「数据库说明与获取」）
+- 已生成 `soccer.db`（见上文「数据库重建」）
 
 ### 启动步骤
 
@@ -208,9 +221,9 @@ cd RealFootball-Management-System
 # 2. 安装依赖
 pip install -r requirements.txt
 
-# 3. 将获取到的 soccer.db 放到项目根目录（与 manage.py 同级）
-#    Windows 示例：
-#    copy /y 下载目录\soccer.db .
+# 3. 生成数据库（首次运行必做，约 300MB，几分钟）
+#    详见上文「数据库重建」：下载 Kaggle 数据集 → 拷成 soccer.db
+#    → sqlite3 soccer.db < rebuild_data.sql → sqlite3 soccer.db < demo_data.sql
 
 # 4. 启动服务
 python manage.py runserver
@@ -218,7 +231,7 @@ python manage.py runserver
 
 浏览器访问 http://127.0.0.1:8000/ 即可打开首页。首次访问请先注册或登录。
 
-> 提示：`soccer.db` 缺失时页面会报数据库错误，请先完成数据库获取步骤。
+> 提示：`soccer.db` 缺失时页面会报数据库错误，请先完成数据库重建。
 
 ---
 

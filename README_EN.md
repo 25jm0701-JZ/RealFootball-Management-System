@@ -95,35 +95,48 @@ Supporting documents (all in this repository):
 
 ---
 
-## Database: Source & How to Get It (Important)
+## Rebuilding the Database (Important)
 
-The project uses a SQLite database `soccer.db` (≈**300 MB**). Because it exceeds GitHub's single-file limit (100 MB), **it is not included in this repository**. You must obtain the database before running the app.
+The project uses a SQLite database `soccer.db` (≈**300 MB**), which exceeds GitHub's 100 MB single-file limit, so it is not committed. The repository ships the **full rebuild scripts** — three steps regenerate it, no external hand-off needed.
 
 ### Data source
 
 The raw player / team / match data comes from the public Kaggle dataset
 [European Soccer Database (hugomathien/soccer)](https://www.kaggle.com/datasets/hugomathien/soccer/data).
+Unzipping it gives a `database.sqlite` with 7 tables, matching this project's row counts:
+`country` 11 / `league` 11 / `team` 299 / `player` 11,060 /
+`player_attributes` 183,978 / `team_attributes` 1,458 / `match` 25,979.
 
-> Note: this project does not use the dataset as-is; it was modified:
-> - `team` gained a `league_id` column;
-> - `player` gained `team_api_id` and `league_id` columns;
-> - `match` statistic columns were split into home / away pairs (e.g. `shoton1` / `shoton2`);
-> - 8 business tables were added (`user`, `follow`, `subscribe`, `employ`, etc.).
->
-> Full schema: [schema.sql](schema.sql).
+### Steps
 
-### Getting soccer.db (Option 1 or 2)
+```bash
+# 1. Download the dataset (Kaggle account required; the web Download button works too)
+kaggle datasets download -d hugomathien/soccer
+unzip soccer.zip                 # produces database.sqlite
 
-**Option 1 (recommended): use the ready-made soccer.db**
+# 2. Copy it into place
+cp database.sqlite soccer.db
 
-The business tables and demo data are not in the Kaggle dataset, so **contact the author for the ready-made `soccer.db`** (it already contains the business tables and demo accounts). Place the file in the **project root** (next to `manage.py`).
+# 3. Add derived columns, create business tables, load demo data
+sqlite3 soccer.db < rebuild_data.sql
+sqlite3 soccer.db < demo_data.sql
+```
 
-**Option 2: rebuild it yourself from the Kaggle data**
+Then run `python manage.py runserver`.
 
-1. Download and extract the dataset from the [Kaggle page](https://www.kaggle.com/datasets/hugomathien/soccer/data);
-2. Use a SQLite tool (e.g. `sqlite3`, DB Browser for SQLite) to import `Country`, `League`, `Team`, `Player`, `Match`, `Team_Attributes`, `Player_Attributes`;
-3. Apply the schema changes described above following [schema.sql](schema.sql);
-4. Run the "Business tables" DDL in [schema.sql](schema.sql) to create `user` / `follow` / `subscribe` / `employ` / `interested`, etc.
+### What the scripts change ([rebuild_data.sql](rebuild_data.sql))
+
+| Change | How |
+|---|---|
+| `team.league_id` | Most frequent league of that team's matches in `match` |
+| `player.team_api_id` / `player.league_id` | From the match line-ups (`home_player_1..11` / `away_player_1..11`), take the team of the player's **last appearance**; league follows from the team |
+| `match` home/away stats | The raw table has one set of team stats per match (home side); this project splits them into `shoton1/shoton2`-style pairs, with `*1` filled from the source and `*2` left empty |
+| Indexes | `player_name`, `team_api_id`, `league_id`, `player_attributes(player_fifa_api_id)` — used by player search and filtering |
+| 8 business tables + demo data | [demo_data.sql](demo_data.sql): 20 rows across 8 tables (demo accounts, managers, follows, employments) |
+
+> **Known gap**: Kaggle only provides home-side match statistics, so the `*2` columns are empty after a rebuild. The original `soccer.db` had them from a source outside the public dataset, and that data cannot be recovered by rebuilding.
+
+Full schema: [schema.sql](schema.sql); core queries: [queries.sql](queries.sql).
 
 ---
 
@@ -132,7 +145,7 @@ The business tables and demo data are not in the Kaggle dataset, so **contact th
 ### Requirements
 
 - Python 3.10+
-- A copy of `soccer.db` (see "Database: Source & How to Get It" above)
+- A generated `soccer.db` (see "Rebuilding the Database" above)
 
 ### Steps
 
@@ -144,7 +157,9 @@ cd RealFootball-Management-System
 # 2. Install dependencies
 pip install -r requirements.txt
 
-# 3. Put soccer.db in the project root (next to manage.py)
+# 3. Build the database (first run only, ≈300 MB, a few minutes)
+#    See "Rebuilding the Database": download Kaggle dataset → cp to soccer.db
+#    → sqlite3 soccer.db < rebuild_data.sql → sqlite3 soccer.db < demo_data.sql
 
 # 4. Run
 python manage.py runserver
@@ -152,7 +167,7 @@ python manage.py runserver
 
 Open http://127.0.0.1:8000/ in your browser. Register or log in on first visit.
 
-> Note: the app reports database errors if `soccer.db` is missing — complete the database step first.
+> Note: the app reports database errors if `soccer.db` is missing — complete the rebuild first.
 
 ---
 
