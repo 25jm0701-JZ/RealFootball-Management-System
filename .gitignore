@@ -26,3 +26,6 @@ Thumbs.db
 
 # ---- 本地 Claude Code 配置（本机工具配置，不对外）----
 .claude/
+
+# ---- 本地密钥说明（含 API Key 配置，仅本机保留，勿提交）----
+DeepSeek_API_Key_*.docx

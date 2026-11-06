@@ -186,7 +186,8 @@ python manage.py runserver
 1. 在 [Kaggle 页面](https://www.kaggle.com/datasets/hugomathien/soccer/data) 下载数据集压缩包并解压；
 2. 使用 SQLite 工具（如 `sqlite3`、DB Browser for SQLite）导入 `Country`、`League`、`Team`、`Player`、`Match`、`Team_Attributes`、`Player_Attributes` 数据；
 3. 按 [schema.sql](schema.sql) 完成结构改造（见上文"数据来源"中的 4 点差异）；
-4. 执行 [schema.sql](schema.sql) 中「第二部分：业务表」的建表语句，创建 `user` / `follow` / `subscribe` / `employ` / `interested` 等业务表。
+4. 执行 [schema.sql](schema.sql) 中「第二部分：业务表」的建表语句，创建 `user` / `follow` / `subscribe` / `employ` / `interested` 等业务表；
+5. 执行 `demo_data.sql` 导入演示业务数据（8 张业务表共 20 行：演示账号、经理、关注、应聘记录）。该文件已从原 `soccer.db` 导出，是 Kaggle 数据集中没有、无法重新下载的部分。
 
 ---
 
